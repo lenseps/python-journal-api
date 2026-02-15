@@ -113,7 +113,7 @@ class Journal:
 
     def _authorize(self) -> None:
         """Authenticate with the API and obtain access token."""
-        self.logger.info(f"Attempting authorization for user: {self.login}")
+        self.logger.info("Attempting authorization.")
         response: requests.Response = self.session.post(
             f"{self.API_BASE}/auth/login",
             json={
@@ -150,7 +150,7 @@ class Journal:
         endpoint: str,
         retry: bool = True,
         **kwargs: Any,
-    ) -> Dict[str, Any]:
+    ) -> Any:
         """Make an HTTP request to the API with automatic re-authorization on 401.
         
         Args:
@@ -190,17 +190,6 @@ class Journal:
 
         self.logger.debug(f"Successfully received response from {endpoint}")
         return response.json()
-
-    def get_by_custom_url(self, url: str) -> Dict[str, Any]:
-        """Make a GET request to a custom URL endpoint.
-        
-        Args:
-            url: Custom endpoint URL
-            
-        Returns:
-            JSON response as dictionary
-        """
-        return self._request("GET", url)
 
     def get_userinfo(self) -> UserInfo:
         """Get user profile information including groups, academic status, and personal details.
@@ -245,7 +234,8 @@ class Journal:
             "status": status,
             "type": homework_type
         }
-        params["group_id"] = group_id
+        if group_id is not None:
+            params["group_id"] = group_id
         self.logger.info(f"Fetching homework (page={page}, status={status}, type={homework_type}, group_id={group_id})")
         return self._request("GET", "/homework/operations/list", params=params)
 

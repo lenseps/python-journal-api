@@ -69,7 +69,7 @@ class UserInfo(TypedDict):
 
 class Journal:
     API_BASE = "https://msapi.top-academy.ru/api/v2"
-    TIMEOUT = 20
+    TIMEOUT = 10
 
     def __init__(
         self,
@@ -262,18 +262,6 @@ class Journal:
         """        
         self.logger.info(f"Fetching schedule for month: {date_filter}")        
         return self._get_schedule("/schedule/operations/get-month", date_filter)
-
-    def get_schedule_by_date_range(self, date_filter: str) -> List[ScheduleItem]:
-        """Get schedule for a date range.
-        
-        Args:
-            date_filter: Date range filter parameter
-            
-        Returns:
-            List of ScheduleItems within the date range
-        """
-        self.logger.info(f"Fetching schedule for date range: {date_filter}")
-        return self._get_schedule("/schedule/operations/get-by-date-range", date_filter)
 
     def get_schedule_by_date(self, date_filter: str) -> List[ScheduleItem]:
         """Get schedule for a specific date.
